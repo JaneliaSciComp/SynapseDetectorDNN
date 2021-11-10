@@ -1,24 +1,54 @@
-# Synapse Detector DNN
+# ExLLSM Synapse Detector
 
-Deep Neuron Network for synapse detection.
+This repository contains code to train and evaluate the performance of a 3D U-Net model for synapse detection. It was designed to classify synaptic sites in large scale volumetric images generated via expansion microscopy and lattice light-sheet imaging (ExLLSM). The `inference` directory contains the detector that uses the trained model to make synapse predictions. This code is integrated into the [ExLLSM Circuit Reconstruction Pipeline](https://github.com/JaneliaSciComp/exllsm-circuit-reconstruction) and currently meant to be run there, inside of a Docker container.
+
+## Quick Start
+
+First setup a conda environment using the following command:
+```
+conda create -n exllsm-synapse
+conda env update -n exllsm-synapse -f environment.yml
+```
+then activate it:
+`
+conda activate exllsm-synapse
+`
 
 ## Training
 
-The `training` directory contains everything necessary for training the model. To train a new model, in the python script ExLLSM_unet_v2_train.py: 
+To train a new model, some parameters in the python script ExLLSM_unet_v2_train.py need to be adjusted: 
 
-* modify line 10 to point to the directory containing raw data and corresponding ground truth image crops. 500x500x500 and 100x100x100 crops have been used for testing
+* modify line 10 to point to the directory containing raw data and corresponding ground truth image crops. 
+** 500x500x500 and 100x100x100 crops have been used for testing
 * modify line 11-13 (and add additional lines for additional data crops) to indicate the name of each raw data crop and each corresponding ground truth data crop (both in nrrd format)
 * modify line 24 to point to the save directory
 * modify line 25 to change training parameters if desired
 * modify line 27 to change the pkl name if desired
 * modify line 30 to name the final trained model
 
-Activate the training environment included and run the updated python script to train.
+Usage: 
 
-To plot the training progress over time, modify lines 5 and 6 of the python script ExLLSM_unet_training_result_plot.py as indicated and run the updated python script.
+     python ExLLSM_unet_v2_train.py
+     
+## Plot training progress
 
-Finally, the ExLLSM_unet_performance_evaluate.py script can be used to calculate the precision and recall (sensitivity) of predicted synapses compared to ground truth data. To use this, modify lines 50-52 as indicated and run the updated python script. It is recommended that the trained model and postprocessing steps are run via the [Expansion Microscopy Pipeline](https://github.com/JaneliaSciComp/expansion-microscopy-pipeline) before evaluating performance versus ground truth data.  
+To plot the training progress over time, modify lines 5 and 6 of the python script ExLLSM_unet_training_result_plot.py as indicated.
 
+Usage: 
+
+     python ExLLSM_unet_training_result_plot.py
+
+## Model Evaluation
+
+To appropriately evaluate the model performance it should be compared to ground truth data from independent samples (brains/animals) not involved in training. 
+     
+It is recommended that the trained model is used via the [ExLLSM Circuit Reconstruction Pipeline](https://github.com/JaneliaSciComp/exllsm-circuit-reconstruction) where additional recommended post-U-Net processing steps not included here are found.
+
+To calculate the precision and recall scores of a model run via the ExLLSM Circuit Reconstruction Pipeline to ground truth data from independent samples, use the ExLLSM_unet_performance_evaluate.py script. Modify lines 50-52 as indicated and run the updated python script. 
+
+Usage: 
+
+     python ExLLSM_unet_performance_evaluate.py
 
 ## Inference
 
