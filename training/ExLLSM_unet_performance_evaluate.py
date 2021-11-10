@@ -57,7 +57,7 @@ def main():
     precision_unet = calculate_performance(predict_img, ground_truth_img)
     sensitivity_unet = calculate_performance(ground_truth_img, predict_img)
     print("Unet")
-    print("Sensitivity = {}".format(sensitivity_unet))
+    print("Recall = {}".format(sensitivity_unet))
     print("Precision = {}".format(precision_unet))
 
 
