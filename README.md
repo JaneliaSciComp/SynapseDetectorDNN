@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/348389664.svg)](https://zenodo.org/badge/latestdoi/348389664)
 
-This repository contains code to train and evaluate the performance of a 3D U-Net model for synapse detection. It was designed to classify synaptic sites in large scale volumetric images generated via expansion microscopy and lattice light-sheet imaging (ExLLSM). The `inference` directory contains the detector that uses the trained model to make synapse predictions. This code is integrated into the [ExLLSM Circuit Reconstruction Pipeline](https://github.com/JaneliaSciComp/exllsm-circuit-reconstruction) and currently meant to be run there, inside of a Docker container.
+This repository contains code to train and evaluate the performance of a 3D U-Net shaped model for synapse detection. It was designed to classify synaptic sites in large scale volumetric images generated via expansion microscopy and lattice light-sheet imaging (ExLLSM). The `inference` directory contains the detector that uses the trained model to make synapse predictions. This code is integrated into the [ExLLSM Circuit Reconstruction Pipeline](https://github.com/JaneliaSciComp/exllsm-circuit-reconstruction) and currently meant to be run there, inside of a Docker container.
 
 ## Quick Start
 
