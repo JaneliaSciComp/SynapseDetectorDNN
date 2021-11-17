@@ -25,7 +25,7 @@ conda activate exllsm-synapse
 To train a new model, some parameters in the python script ExLLSM_unet_v2_train.py need to be adjusted: 
 
 * modify line 10 to point to the directory containing raw data and corresponding ground truth image crops. 
-** 500x500x500 and 100x100x100 crops have been used for testing
+** 500x500x500 and 100x100x100 crops have been used for testing **
 * modify line 11-13 (and add additional lines for additional data crops) to indicate the name of each raw data crop and each corresponding ground truth data crop (both in nrrd format)
 * modify line 24 to point to the save directory
 * modify line 25 to change training parameters if desired
