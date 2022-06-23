@@ -48,7 +48,9 @@ def masked_error_neg(y_true, y_pred):
     return score
 
 
-def apply_unet(img, model_path, input_sz=(64, 64, 64), step=(24, 24, 24), mask=None):
+def apply_unet(img, model_path, predict_threshold=0.5,
+               input_sz=(64, 64, 64), step=(24, 24, 24),
+               mask=None):
     """
     Test 3D U-Net on an image data
     args:
@@ -110,8 +112,8 @@ def apply_unet(img, model_path, input_sz=(64, 64, 64), step=(24, 24, 24), mask=N
                             z_pos+gap[2]:z_pos+gap[2]+step[2]] = \
                     patch_predict[0, ..., 0]
 
-    predict_img[predict_img >= 0.5] = 255
-    predict_img[predict_img < 0.5] = 0
+    predict_img[predict_img >= predict_threshold] = 255
+    predict_img[predict_img < predict_threshold] = 0
     predict_img = np.uint8(predict_img)
     predict_img = predict_img[gap[0]:predict_img.shape[0]-input_sz[0],
                               gap[1]:predict_img.shape[1]-input_sz[1],
@@ -151,6 +153,10 @@ def main():
                         dest='model_path', type=str, required=True,
                         help='Path to the U-Net model n5')
 
+    parser.add_argument('--predict-th'
+                        dest='predict_threshold', type=float, default=0.5,
+                        help='Predict threshold')
+
     parser.add_argument('--start',
                         dest='start_coord', type=str, required=True,
                         metavar='x1,y1,z1',
@@ -160,6 +166,16 @@ def main():
                         dest='end_coord', type=str, required=True,
                         metavar='x2,y2,z2',
                         help='Ending coordinate (x,y,z) of block to process')
+
+    parser.add_argument('--unet-sz',
+                        dest='unet_size', type=str,
+                        metavar='dx,dy,dz',
+                        help='U-Net input size')
+
+    parser.add_argument('--unet-step',
+                        dest='unet_step', type=str,
+                        metavar='dx,dy,dz',
+                        help='U-Net window (step) size')
 
     parser.add_argument('--set_gpu_mem_growth', dest='set_gpu_mem_growth',
                         action='store_true', default=False,
@@ -172,13 +188,22 @@ def main():
 
     start = tuple([int(d) for d in args.start_coord.split(',')])
     end = tuple([int(d) for d in args.end_coord.split(',')])
+    unet_sz = (tuple([int(d) for d in args.unet_size.split(',')]) 
+               if args.unet_size
+               else None)
+    unet_step = (tuple([int(d) for d in args.unet_step.split(',')])
+                 if args.unet_step
+                 else None)
 
     # Read part of the n5 based upon location
     img = read_n5_block(args.input_path, args.input_data_set, start, end)
 
     print('Applying 3D U-Net...')
     start_time = time.time()
-    img = apply_unet(img, args.model_path)
+    img = apply_unet(img, args.model_path,
+                     predict_threshold=args.predict_threshold,
+                     input_sz=unet_sz,
+                     step=unet_step)
     print("DONE!! Running time is {} seconds".format(time.time()-start_time))
 
     # Write to the same block in the output n5
