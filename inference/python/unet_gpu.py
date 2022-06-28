@@ -153,7 +153,7 @@ def main():
                         dest='model_path', type=str, required=True,
                         help='Path to the U-Net model n5')
 
-    parser.add_argument('--predict-th'
+    parser.add_argument('--predict-th',
                         dest='predict_threshold', type=float, default=0.5,
                         help='Predict threshold')
 
