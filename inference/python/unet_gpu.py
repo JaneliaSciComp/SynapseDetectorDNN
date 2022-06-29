@@ -190,10 +190,10 @@ def main():
     end = tuple([int(d) for d in args.end_coord.split(',')])
     unet_sz = (tuple([int(d) for d in args.unet_size.split(',')]) 
                if args.unet_size
-               else None)
+               else (64, 64, 64)) # use defaults if no arg provided
     unet_step = (tuple([int(d) for d in args.unet_step.split(',')])
                  if args.unet_step
-                 else None)
+                 else (24, 24, 24)) # use defaults if no arg provided
 
     # Read part of the n5 based upon location
     img = read_n5_block(args.input_path, args.input_data_set, start, end)
