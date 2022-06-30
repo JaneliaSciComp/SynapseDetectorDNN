@@ -60,7 +60,11 @@ def apply_unet(img, model_path, predict_threshold=0.5,
     mask: (optional) a mask applied to the img
     """
 
-    print("Doing prediction using 3D U-Net...", flush=True)
+    print("Doing prediction using 3D U-Net...",
+        "input_sz=",input_sz,
+        "step=",step,
+        "predict_threshold=",predict_threshold,
+        flush=True)
     if mask is not None:
         assert mask.shape == img.shape, \
             "Mask and image shapes do not match!"
